@@ -30,25 +30,29 @@ namespace InterviewApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        public async Task<ActionResult<CreateProductDTO>> CreateProduct([FromBody] CreateProductDTO productDTO)
         {
-            if (product == null) return BadRequest();
+            if (productDTO == null) return BadRequest();
+
+            var product = new Product
+            {
+                Name = productDTO.Name,
+                Price = productDTO.Price
+            };
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, Product updatedProduct)
+        public async Task<IActionResult> UpdateProduct(int id, UpdateProductDTO productDTO)
         {
-            // Current model doesn't support changing an individual field. PATCH would be good for this.
-            if (id != updatedProduct.Id) return BadRequest();
-
             var existingProduct = await _context.Products.FindAsync(id);
             if (existingProduct == null) return NotFound();
 
-            existingProduct.Name = updatedProduct.Name;
-            existingProduct.Price = updatedProduct.Price;
+            if (productDTO.Name != null) existingProduct.Name = productDTO.Name;
+            if (productDTO.Price != null) existingProduct.Price = (decimal)productDTO.Price;
 
             try
             {

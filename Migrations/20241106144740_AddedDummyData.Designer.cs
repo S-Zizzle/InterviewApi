@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InterviewApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241106121432_testMigration")]
-    partial class testMigration
+    [Migration("20241106144740_AddedDummyData")]
+    partial class AddedDummyData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
